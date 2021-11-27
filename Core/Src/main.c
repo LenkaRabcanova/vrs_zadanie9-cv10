@@ -57,6 +57,7 @@
 	int pwm=0;
 	int truepwm = 0;
 	bool mode=true;       //false=auto, true=manual
+	bool change= true;    //false= falling, true=rising
 	bool isListening = false;
 
 /* USER CODE END PV */
@@ -174,21 +175,41 @@ void TIM2_IRQHandler()
 {
 	if(LL_TIM_IsActiveFlag_CC2(TIM2))
 	{
-		if(truepwm<pwm)
+		if(mode==true)
 		{
-			 truepwm = truepwm  + 1;
+			if(change==true)
+			    truepwm = truepwm  + 1;
+			if(change==false)
+				truepwm = truepwm  - 1;
 
+			if(truepwm==pwm)
+				change=false;
+			if(truepwm==0)
+				change=true;
+
+			setDutyCycle(truepwm);
 		}
-		if(truepwm>pwm)
+
+		if(mode==false)
 		{
-			 truepwm = truepwm  - 1;
+			if(change==true)
+			    truepwm = truepwm  + 1;
+			if(change==false)
+				truepwm = truepwm  - 1;
+
+			if(truepwm==99)
+				change=false;
+			if(truepwm==0)
+				change=true;
+
+			setDutyCycle(truepwm);
 		}
-		setDutyCycle(truepwm);
+
 
 		LL_TIM_ClearFlag_CC2(TIM2);
-
 	}
 }
+
 void proccesDmaData(uint8_t sign)
 {
 	/* Process received data */
@@ -197,7 +218,6 @@ void proccesDmaData(uint8_t sign)
 
 	 if(sign == '$'){
 		isListening = true;
-		i = 0;
 	 }
 
 
@@ -208,19 +228,19 @@ void proccesDmaData(uint8_t sign)
 
 
 		if(!strcmp(msg,"$manual$"))
-			mode=0;
+			mode=true;
 
 		if(!strcmp(msg,"$auto$"))
-			mode=1;
+			mode=false;
 
 
 		i++;
 
 	}
 
-	if(i >= 35 || (sign == '$' && i>1)){
+	if(i >= 35 || (sign == '$' && i>1 && isListening==true)){
 
-		 if(mode==0 && !strncmp(msg,"$PWM",4)){
+		 if(mode=true && !strncmp(msg,"$PWM",4)){
 			 int first_digit=0;
 			 int second_digit=0;
 
