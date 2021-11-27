@@ -54,7 +54,7 @@
 	// type your global variables here:
 	char msg[35];
 	int i = 0;
-	int pwm=0;
+	int pwm=50;
 	int truepwm = 0;
 	bool mode=true;       //false=auto, true=manual
 	bool change= true;    //false= falling, true=rising
@@ -121,7 +121,7 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  setDutyCycle(50);
+  setDutyCycle(truepwm);
   while (1)
   {
     /* USER CODE END WHILE */
