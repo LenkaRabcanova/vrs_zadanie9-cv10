@@ -122,6 +122,9 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   setDutyCycle(truepwm);
+  LL_TIM_CC_EnableChannel(TIM2, LL_TIM_CHANNEL_CH1);
+  LL_TIM_EnableCounter(TIM2);
+
   while (1)
   {
     /* USER CODE END WHILE */
