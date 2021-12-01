@@ -85,6 +85,17 @@ void MX_USART2_UART_Init(void)
 
   LL_DMA_SetMemorySize(DMA1, LL_DMA_CHANNEL_6, LL_DMA_MDATAALIGN_BYTE);
 
+  LL_DMA_ConfigAddresses(	DMA1, LL_DMA_CHANNEL_6,
+						 	LL_USART_DMA_GetRegAddr(USART2, LL_USART_DMA_REG_DATA_RECEIVE),
+							(uint32_t)bufferUSART2dma,
+							LL_DMA_GetDataTransferDirection(DMA1, LL_DMA_CHANNEL_6));
+
+  LL_DMA_SetDataLength(DMA1, LL_DMA_CHANNEL_6, DMA_USART2_BUFFER_SIZE);
+  LL_DMA_EnableChannel(DMA1, LL_DMA_CHANNEL_6);
+  LL_USART_EnableDMAReq_RX(USART2);
+  LL_DMA_EnableIT_TC(DMA1, LL_DMA_CHANNEL_6);
+  LL_DMA_EnableIT_HT(DMA1, LL_DMA_CHANNEL_6);
+
   /* USART2_TX Init */
   LL_DMA_SetDataTransferDirection(DMA1, LL_DMA_CHANNEL_7, LL_DMA_DIRECTION_MEMORY_TO_PERIPH);
 
@@ -99,6 +110,11 @@ void MX_USART2_UART_Init(void)
   LL_DMA_SetPeriphSize(DMA1, LL_DMA_CHANNEL_7, LL_DMA_PDATAALIGN_BYTE);
 
   LL_DMA_SetMemorySize(DMA1, LL_DMA_CHANNEL_7, LL_DMA_MDATAALIGN_BYTE);
+
+  LL_DMA_SetPeriphAddress(DMA1, LL_DMA_CHANNEL_7, LL_USART_DMA_GetRegAddr(USART2, LL_USART_DMA_REG_DATA_TRANSMIT));
+  LL_USART_EnableDMAReq_TX(USART2);
+
+  LL_DMA_EnableIT_TE(DMA1, LL_DMA_CHANNEL_7);
 
   /* USART2 interrupt Init */
   NVIC_SetPriority(USART2_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
@@ -117,9 +133,10 @@ void MX_USART2_UART_Init(void)
   LL_USART_Init(USART2, &USART_InitStruct);
   LL_USART_DisableIT_CTS(USART2);
   LL_USART_ConfigAsyncMode(USART2);
-  LL_USART_Enable(USART2);
   /* USER CODE BEGIN USART2_Init 2 */
-
+  /* Enable USART2 peripheral and interrupts*/
+  LL_USART_EnableIT_IDLE(USART2);
+  LL_USART_Enable(USART2);
   /* USER CODE END USART2_Init 2 */
 
 }
@@ -144,7 +161,7 @@ void USART2_CheckDmaReception(void)
 		for(int i=old_pos; i<(DMA_USART2_BUFFER_SIZE - LL_DMA_GetDataLength(DMA1, LL_DMA_CHANNEL_6)); i++){
 
 		USART2_ProcessData(bufferUSART2dma[i]);
-		old_pos=i;
+		old_pos=i+1;
 
 		}
 

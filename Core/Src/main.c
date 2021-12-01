@@ -58,7 +58,7 @@
 	// type your global variables here:
 	char msg[35];
 	int i = 0;
-	int pwm=50;
+	int pwm=15;
 	int truepwm = 0;
 	bool mode=true;       //false=auto, true=manual
 	bool change= true;    //false= falling, true=rising
@@ -118,6 +118,7 @@ int main(void)
   MX_DMA_Init();
   MX_USART2_UART_Init();
   MX_TIM2_Init();
+  USART2_RegisterCallback(proccesDmaData);
   /* USER CODE BEGIN 2 */
   LL_TIM_EnableIT_CC2(TIM2);
   LL_TIM_EnableCounter(TIM2);
@@ -125,7 +126,7 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  setDutyCycle(truepwm);
+  //setDutyCycle(49);
   LL_TIM_CC_EnableChannel(TIM2, LL_TIM_CHANNEL_CH1);
   LL_TIM_EnableCounter(TIM2);
 
@@ -239,14 +240,13 @@ void proccesDmaData(uint8_t sign)
 		if(!strcmp(msg,"$auto$"))
 			mode=false;
 
-
 		i++;
 
 	}
 
 	if(i >= 35 || (sign == '$' && i>1 && isListening==true)){
 
-		 if(mode=true && !strncmp(msg,"$PWM",4)){
+		 if(mode==true && !strncmp(msg,"$PWM",4)){
 			 int first_digit=0;
 			 int second_digit=0;
 
