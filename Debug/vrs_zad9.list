@@ -1235,22 +1235,22 @@ void TIM2_IRQHandler()
  8000894:	4a28      	ldr	r2, [pc, #160]	; (8000938 <TIM2_IRQHandler+0xe4>)
  8000896:	6013      	str	r3, [r2, #0]
 
-			if(truepwm==pwm)
+			if(truepwm>=pwm)
  8000898:	4b27      	ldr	r3, [pc, #156]	; (8000938 <TIM2_IRQHandler+0xe4>)
  800089a:	681a      	ldr	r2, [r3, #0]
  800089c:	4b27      	ldr	r3, [pc, #156]	; (800093c <TIM2_IRQHandler+0xe8>)
  800089e:	681b      	ldr	r3, [r3, #0]
  80008a0:	429a      	cmp	r2, r3
- 80008a2:	d102      	bne.n	80008aa <TIM2_IRQHandler+0x56>
+ 80008a2:	db02      	blt.n	80008aa <TIM2_IRQHandler+0x56>
 				change=false;
  80008a4:	4b23      	ldr	r3, [pc, #140]	; (8000934 <TIM2_IRQHandler+0xe0>)
  80008a6:	2200      	movs	r2, #0
  80008a8:	701a      	strb	r2, [r3, #0]
-			if(truepwm==0)
+			if(truepwm<=0)
  80008aa:	4b23      	ldr	r3, [pc, #140]	; (8000938 <TIM2_IRQHandler+0xe4>)
  80008ac:	681b      	ldr	r3, [r3, #0]
  80008ae:	2b00      	cmp	r3, #0
- 80008b0:	d102      	bne.n	80008b8 <TIM2_IRQHandler+0x64>
+ 80008b0:	dc02      	bgt.n	80008b8 <TIM2_IRQHandler+0x64>
 				change=true;
  80008b2:	4b20      	ldr	r3, [pc, #128]	; (8000934 <TIM2_IRQHandler+0xe0>)
  80008b4:	2201      	movs	r2, #1
@@ -1297,20 +1297,20 @@ void TIM2_IRQHandler()
  80008f8:	4a0f      	ldr	r2, [pc, #60]	; (8000938 <TIM2_IRQHandler+0xe4>)
  80008fa:	6013      	str	r3, [r2, #0]
 
-			if(truepwm==99)
+			if(truepwm>=99)
  80008fc:	4b0e      	ldr	r3, [pc, #56]	; (8000938 <TIM2_IRQHandler+0xe4>)
  80008fe:	681b      	ldr	r3, [r3, #0]
- 8000900:	2b63      	cmp	r3, #99	; 0x63
- 8000902:	d102      	bne.n	800090a <TIM2_IRQHandler+0xb6>
+ 8000900:	2b62      	cmp	r3, #98	; 0x62
+ 8000902:	dd02      	ble.n	800090a <TIM2_IRQHandler+0xb6>
 				change=false;
  8000904:	4b0b      	ldr	r3, [pc, #44]	; (8000934 <TIM2_IRQHandler+0xe0>)
  8000906:	2200      	movs	r2, #0
  8000908:	701a      	strb	r2, [r3, #0]
-			if(truepwm==0)
+			if(truepwm<=0)
  800090a:	4b0b      	ldr	r3, [pc, #44]	; (8000938 <TIM2_IRQHandler+0xe4>)
  800090c:	681b      	ldr	r3, [r3, #0]
  800090e:	2b00      	cmp	r3, #0
- 8000910:	d102      	bne.n	8000918 <TIM2_IRQHandler+0xc4>
+ 8000910:	dc02      	bgt.n	8000918 <TIM2_IRQHandler+0xc4>
 				change=true;
  8000912:	4b08      	ldr	r3, [pc, #32]	; (8000934 <TIM2_IRQHandler+0xe0>)
  8000914:	2201      	movs	r2, #1

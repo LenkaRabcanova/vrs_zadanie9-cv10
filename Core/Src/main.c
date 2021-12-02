@@ -189,9 +189,9 @@ void TIM2_IRQHandler()
 			if(change==false)
 				truepwm = truepwm  - 1;
 
-			if(truepwm==pwm)
+			if(truepwm>=pwm)
 				change=false;
-			if(truepwm==0)
+			if(truepwm<=0)
 				change=true;
 
 			setDutyCycle(truepwm);
@@ -204,9 +204,9 @@ void TIM2_IRQHandler()
 			if(change==false)
 				truepwm = truepwm  - 1;
 
-			if(truepwm==99)
+			if(truepwm>=99)
 				change=false;
-			if(truepwm==0)
+			if(truepwm<=0)
 				change=true;
 
 			setDutyCycle(truepwm);
